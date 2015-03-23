@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+  <title>Shop Cart!</title>
+  <meta charset="utf-8" />
+  <script src="../bower_components/angular/angular_old.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body ng-controller="CartController">
+  <h1>Your Order</h1>
+  <div ng-repeat="item in items">
+    <span>{{item.title}}</span>
+    <input ng-model="item.quantity">
+    <span>{{item.price | currency}} | </span>
+    <span>{{ item.price * item.quantity | currency }}</span>
+    <button ng-click="remove($index)">Remove</button>
+  </div>
+
+  <script type="text/javascript" charset="utf-8">
+  function CartController($scope) {
+    $scope.items = [
+      {title: 'Cokolada' , quantity: 8  , price: 4}  ,
+      {title: 'Cips'     , quantity: 11 , price: 2}  ,
+      {title: 'Caj'      , quantity: 4  , price: 10}
+    ];
+
+    $scope.remove = function(index) {
+      $scope.items.splice(index, 1);
+    }
+  }
+  </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html ng-app='Guidebook'>
+<head>
+  <!-- INCLUDES -->
+  <script src='src/angular.min.js'></script>
+  <script src='src/angular-route.js'></script>
+  <!-- APP -->
+  <script src='guidebook.js'></script>
+  <!-- CONTROLLERS -->
+  <script src='controller/chaptercontroller.js'></script>
+  <script src='controller/notescontrollers.js'></script>
+  <script src='controller/deletenotecontroller.js'></script>
+  <!-- MODELS -->
+  <script src='model/notemodel.js'></script>
+  <script src='model/chaptermodel.js'></script>
+  <!-- DIRECTIVE (VIEW) -->
+  <script src='view/directive/noteList.js'></script>
+  <!-- CSS -->
+  <link rel='stylesheet' href='view/styles.css'>
+  <title>AngularJS Starter Guidebook</title>
+</head>
+<body>
+<h1>Welcome to the AngularJS Starter Guidebook</h1>
+<!-- NG&#45;VIEW AUTO LOADUJE TEMPLATE, moze biti SAMO 1 na strani -->
+<div ng-view>
+  <!-- Views are added here at runtime. -->
+</div>
+</body>
+</html>

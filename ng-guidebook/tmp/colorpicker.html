@@ -1,0 +1,61 @@
+<!-- PRIMER: 2-WAY DATA BINDING -->
+<!-- Data binding is the idea that some user input can be tied directly to view output. -->
+<!-- There's no point going through a controller if we're just going to present the output  -->
+<!-- the same way every time. -->
+
+<!DOCTYPE html>
+<!-- OVO JE STARI NACIN BEZ DATABINDINGA -->
+<html ng-app>
+<head>
+<script src='http://ajax.googleapis.com/ajax/libs/
+angularjs/1.0.2/angular.min.js'></script>
+<script>
+// Svaki put kad se izvrsi promena boje (ng-change)
+// poziva se setColor iz kontrolera
+function ColorController($scope) {
+  $scope.setColor = function() {
+    var colours = document.getElementsByTagName('input');
+    document.getElementById('label').style.color = 'rgb('
+        + colours[0].value + ','
+        + colours[1].value + ','
+        + colours[2].value + ')';
+  }
+}
+</script>
+<title>AngularJS Color Picker</title>
+</head>
+<!-- NG-MODEL > Neophodan je da bi ng&#45;change radio (mozda i drugi eventovi) -->
+<body ng-controller='ColorController'>
+  <h1 id='label' style='color: rgb(128,128,128);
+    '>Drag to change colour:</h1>
+  <input type='range' min='0' max='255' step='1'
+  ng-model='r' ng-change='setColor();'>
+  <input type='range' min='0' max='255' step='1'
+  ng-model='g' ng-change='setColor();'>
+  <input type='range' min='0' max='255' step='1'
+  ng-model='b' ng-change='setColor();'>
+</body>
+</html>
+
+
+<!-- NOVI NACIN *SA* DATABINDINGOM -->
+<!DOCTYPE html>
+<html ng-app>
+<head>
+<script src='http://ajax.googleapis.com/ajax/libs/
+angularjs/1.0.2/angular.min.js'></script>
+<title>AngularJS Color Picker</title>
+</head>
+<!-- ng-model = vrednosti boja -->
+<!-- ng-init = inicijalne vrednosti modela, preset -->
+<!-- {{}} databinding vrednosti -->
+<!-- ng-click = reset vrednosti modela na pocetne -->
+<body ng-init='r=128; b=128; g=128;'>
+  <h1 ng-click='r=128; b=128; g=128;'
+    style='color: rgb({{r}},{{g}},{{b}});
+    '>Drag to change colour, click to reset</h1>
+  <input type='range' min='0' max='255' step='1' ng-model='r'>
+  <input type='range' min='0' max='255' step='1' ng-model='g'>
+  <input type='range' min='0' max='255' step='1' ng-model='b'>
+</body>
+</html>

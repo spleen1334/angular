@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+  <title>CSS ng</title>
+  <meta charset="utf-8" />
+  <style type="text/css" media="screen">
+  .error {
+    background-color: red;
+  }
+
+  .warning {
+    background-color: yellow;
+  }
+
+  .selected {
+    background-color: lightgreen;
+  }
+
+  .toggled {
+    background-color: purple;
+  }
+  </style>
+  <script src="bower_components/angular/angular_old.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<h2>NG-CLASS & NG-STYLE</h2>
+<div ng-controller='HeaderController'>
+
+  <div ng-class='{error: isError, warning: isWarning}'>{{messageText}}</div>
+
+  <button ng-click='showError()'>Simulate Error</button>
+  <button ng-click='showWarning()'>Simulate Warning</button>
+</div>
+
+<h2>.selected</h2>
+<table ng-controller='RestaurantTableController'>
+  <tr ng-repeat='restaurant in directory' ng-click='selectRestaurant($index)'
+    ng-class='{selected: $index == selectedRow}'>
+  <!-- ovde selected se dodeljuje SAMO kada je $index==selectedRow -->
+    <td ng-mouseover="toggleTest($index)">{{restaurant.name}}</td>
+    <td ng-class='{toggled: restaurant.v}'>{{restaurant.cuisine}}</td>
+  </tr>
+</table>
+
+<h2>NG-src & NG-href</h2>
+<img ng-src="/images/cats/{{favoriteCat}}" alt="">
+<a href="/shop/category={{productId}}">Link for product</a>
+
+
+<script>
+
+function HeaderController($scope) {
+  $scope.isError = false;
+  $scope.isWarning = false;
+
+  $scope.showError = function() {
+    $scope.messageText = 'This is an error!';
+    $scope.isError = true;
+    $scope.isWarning = false;
+  };
+
+  $scope.showWarning = function() {
+    $scope.messageText = 'Just a warning. Please carry on.';
+    $scope.isWarning = true;
+    $scope.isError = false;
+  };
+}
+
+// ROW SELECT
+function RestaurantTableController($scope) {
+  // $scope.directory = [{name:'The Handsome Heifer', cuisine:'BBQ'},
+  //   {name:'Green\'s Green Greens', cuisine:'Salads'},
+  //   {name:'House of Fine Fish', cuisine:'Seafood'}];
+
+  $scope.directory = [{name:'The Handsome Heifer', cuisine:'BBQ', v:0},
+    {name:'Green\'s Green Greens', cuisine:'Salads', v:0},
+    {name:'House of Fine Fish', cuisine:'Seafood', v:0}];
+
+  // ONCLICK >> selectedRow menja u vrednosti $index da bi se dodelio .selected CSS
+  // PRE CLICKA selectedRow = NULL
+  $scope.selectRestaurant = function(row) {
+    // row = $index
+    $scope.selectedRow = row;
+  };
+
+  $scope.toggleTest = function(row) {
+    $scope.directory[row].v = 1;
+  }
+}
+
+// NG-SRC & NG-HREF
+// Because browsers are aggressive about loading images
+// parallel to other content, Angular doesn’t get a chance to intercept data binding requests.
+
+</script>
+</body>
+</html>

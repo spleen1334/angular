@@ -1,0 +1,25 @@
+<ul>
+  <li ng-repeat='chapter in chapters | orderBy:"title"'>
+   <h2>{{chapter.title}}</h2>
+   <p>{{chapter.summary}}</p>
+   <p>
+       <!-- NOTES -->
+       <a href='#/chapter/{{chapter.id}}'>
+         {{chapter.notes.length}}
+         <!-- SHOW HIDE &#45; zanimljivo resenje to je kao neki IF -->
+         <span ng-show='chapter.notes.length == 1'>note</span>
+         <span ng-hide='chapter.notes.length == 1'> notes</span>
+       </a>
+       |
+       <a href='#/addNote/{{chapter.id}}'>add note</a>
+   </p>
+   <!-- Prikazuje notes<ul> samo ukoliko se chapter.id slaze sa trenutno selektovanim chapter(id) -->
+   <!-- selectedChapterId > je definisan u kontroleru -->
+   <gb-note-list
+    notes='chapter.notes'
+    order-by="id"
+    delete-note-handler='onDelete'
+    show='chapter.id == selectedChapterId' />
+   <!-- OVDE SE UCITAVA NOVI VIEW IZ DIREKTIVE (gb-note-list) -->
+  </li>
+</ul>

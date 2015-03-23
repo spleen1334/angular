@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html ng-app="ShoppingModule">
+<head>
+  <title>Service, Provider & Factory</title>
+  <meta charset="utf-8" />
+  <style type="text/css" media="screen">
+  </style>
+  <script src="bower_components/angular/angular_old.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+
+<h2>Dependency Injection</h2>
+<div ng-controller="ShoppingController">
+  <h1>Shop!</h1>
+  <table>
+  <tr ng-repeat="item in items">
+    <td>{{item.title}}</td>
+    <td>{{item.description}}</td>
+    <td>{{item.price | currency}}</td>
+  </tr>
+  </table>
+</div>
+
+<script>
+// DEPENDENCY
+// MODULE
+// 1. Service
+// 2. Factory
+// 3. Provider
+
+
+// MODULE
+// ng-app="shoppingModule"
+// preporuka je da je dovoljan jedan modul za applikaciju
+// Sve dependency idu u []
+var shoppingModule = angular.module('ShoppingModule', []);
+
+// Factory
+// definise Items dependency, koji posle moze da se koristi
+shoppingModule.factory('Items', function() {
+  var items = {};
+  items.query = function() {
+    return [
+      {title: 'Paint pots', description: 'Pots full of paint', price: 3.95},
+      {title: 'Polka dots', description: 'Dots with polka', price: 2.95},
+      {title: 'Pebbles', description: 'Just little rocks', price: 6.95}
+    ];
+  };
+  return items;
+});
+
+// Controller
+// Ucitan je factory Items
+// moze i: shoppingModule.controller('ShoppingController', function($scope, Items)) {}
+function ShoppingController($scope, Items) {
+  $scope.items = Items.query();
+}
+
+
+// **************************
+// SERVICE, FACTORY, PROVIDER
+//***************************
+
+var myApp = angular.module('myApp', []);
+
+//service style, probably the simplest one
+myApp.service('helloWorldFromService', function() {
+    this.sayHello = function() {
+        return "Hello, World!"
+    };
+});
+
+//factory style, more involved but more sophisticated
+// mora da ima return uvek
+myApp.factory('helloWorldFromFactory', function() {
+    return {
+        sayHello: function() {
+            return "Hello, World!"
+        }
+    };
+});
+
+//provider style, full blown, configurable version
+// ovde postoje get/set, mozda najslicnije Backbone
+myApp.provider('helloWorld', function() {
+    // In the provider function, you cannot inject any
+    // service or factory. This can only be done at the
+    // "$get" method.
+
+    this.name = 'Default';
+
+    // $get je deo koji vracamo da bi koristili dalje u app
+    this.$get = function() {
+        var name = this.name;
+        return {
+            sayHello: function() {
+                return "Hello, " + name + "!"
+            }
+        }
+    };
+
+    // funkcija za configuraciju
+    this.setName = function(name) {
+        this.name = name;
+    };
+});
+
+//hey, we can configure a provider!
+// moguce je podesiti provider, kao i vrednosti unutar njega
+myApp.config(function(helloWorldProvider){
+    helloWorldProvider.setName('World');
+});
+
+
+function MyCtrl($scope, helloWorld, helloWorldFromFactory, helloWorldFromService) {
+
+    $scope.hellos = [
+        helloWorld.sayHello(),
+        helloWorldFromFactory.sayHello(),
+        helloWorldFromService.sayHello()];
+}​
+
+
+/*
+// DODATNO OBJASNJENJE:
+
+ANGULAR FACTORY, SERVICE, PROVIDER:
+
+1) When you’re using a Factory you create an object, add properties to it, then return that same object. When you pass this factory into your controller, those properties on the object will now be available in that controller through your factory.
+
+app.controller(‘myFactoryCtrl’, function($scope, myFactory){
+  $scope.artist = myFactory.getArtist();
+});
+
+app.factory(‘myFactory’, function(){
+  var _artist = ‘Shakira’;
+  var service = {};
+
+  service.getArtist = function(){
+    return _artist;
+  }
+
+  return service;
+});
+
+
+2) When you’re using Service, Angular instantiates it behind the scenes with the ‘new’ keyword. Because of that, you’ll add properties to ‘this’ and the service will return ‘this’. When you pass the service into your controller, those properties on ‘this’ will now be available on that controller through your service.
+
+app.controller(‘myServiceCtrl’, function($scope, myService){
+  $scope.artist = myService.getArtist();
+});
+
+app.service(‘myService’, function(){
+  var _artist = ‘Nelly’;
+  this.getArtist = function(){
+    return _artist;
+  }
+});
+
+
+3) Providers are the only service you can pass into your .config() function. Use a provider when you want to provide module-wide configuration for your service object before making it available.
+
+app.controller(‘myProvider’, function($scope, myProvider){
+  $scope.artist = myProvider.getArtist();
+  $scope.data.thingFromConfig = myProvider.thingOnConfig;
+});
+
+app.provider(‘myProvider’, function(){
+ //Only the next two lines are available in the app.config()
+ this._artist = ‘’;
+ this.thingFromConfig = ‘’;
+  this.$get = function(){
+    var that = this;
+    return {
+      getArtist: function(){
+        return that._artist;
+      },
+      thingOnConfig: that.thingFromConfig
+    }
+  }
+});
+
+app.config(function(myProviderProvider){
+  myProviderProvider.thingFromConfig = ‘This was set in config’;
+});
+*/
+
+</script>
+</body>
+</html>

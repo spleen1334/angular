@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+  <title>Validation</title>
+  <meta charset="utf-8" />
+  <style type="text/css" media="screen">
+  </style>
+  <script src="bower_components/angular/angular_old.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+
+<!-- VALIDATION OPCIJE -->
+<!-- required, ng-minlength, ng-maxlenght, disabled -->
+
+<h2>VALIDATION: Sign Up</h2>
+<form name='addUserForm' ng-controller="AddUserController">
+	<div ng-show='message'>{{message}}</div>
+	<div>First name: <input name='firstName' ng-model='user.first' required></div>
+	<div>Last name: <input ng-model='user.last' required></div>
+	<div>Email: <input type='email' ng-model='user.email' required></div>
+	<div>Age: <input type='number'
+	ng-model='user.age'
+	ng-maxlength='3'
+	ng-min='1'></div>
+	<div><button ng-click='addUser()'
+	ng-disabled='!addUserForm.$valid'>Submit</button>
+	<!-- addUserForm = html name -->
+	<!-- $valid = validation state -->
+</form>
+</body>
+<script>
+
+// $valid je property
+// ng-disabled=! >> fora kao kod addy bb
+
+function AddUserController($scope) {
+	$scope.message = '';
+	$scope.addUser = function () {
+		$scope.message = 'Thanks, ' + $scope.user.first + ', we added you!';
+	};
+}
+
+</script>
+</body>
+</html>

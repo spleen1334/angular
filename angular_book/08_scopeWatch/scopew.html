@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+  <title>Scope & Watch</title>
+  <meta charset="utf-8" />
+  <style type="text/css" media="screen">
+  </style>
+  <script src="bower_components/angular/angular_old.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+
+<h2>Expressions</h2>
+<div ng-controller="CountCtrl">
+  <button ng-click="setCount()">Count to {{count}}</button>
+</div>
+
+<button ng-click="count=3">Same as prev: {{count}}</button>
+<br>
+
+<input ng-model="counting"><strong>{{counting}}</strong>
+
+<h2>WATCH()</h2>
+<div ng-controller="CartController">
+  <div ng-repeat="item in items">
+    <span>{{item.title}}</span>
+    <input ng-model="item.quantity">
+    <span>{{item.price | currency}}</span>
+    <span>{{item.price * item.quantity | currency}}</span>
+  </div>
+  <div>Total: {{totalCart() | currency}}</div>
+  <div>Discount: {{bill.discount | currency}}</div>
+  <div>Subtotal: {{subtotal() | currency}}</div>
+</div>
+
+  <!-- PERFOMANCE TWEAK -->
+  <div>Total: {{bill.total | currency}}</div>
+  <div>Discount: {{bill.discount | currency}}</div>
+  <div>Subtotal: {{bill.total | currency}}</div>
+
+<script>
+// SCOPE SETUP
+// 1. Expression (prva dva primera)
+// 2. Model
+
+
+function CountCtrl($scope) {
+  $scope.setCount = function() {
+    $scope.count = 3;
+  }
+}
+
+
+// WATCH()
+function CartController($scope) {
+  $scope.bill = {};
+  $scope.items = [
+    {title: 'Paint pots' , quantity: 8  , price: 3.95}  ,
+    {title: 'Polka dots' , quantity: 17 , price: 12.95} ,
+    {title: 'Pebbles'    , quantity: 5  , price: 6.95}
+  ];
+
+  $scope.totalCart = function() {
+    var total = 0;
+    for (var i = 0, len = $scope.items.length; i < len; i++) {
+      total = total + $scope.items[i].price * $scope.items[i].quantity;
+
+    }
+    return total;
+  }
+
+  $scope.subtotal = function() {
+    return $scope.totalCart() - $scope.bill.discount;
+
+  };
+
+  // Watch f() poziva ovo
+  // 3 parametra ()
+  function calculateDiscount(newValue, oldValue, scope) {
+    $scope.bill.discount = newValue > 100 ? 10 : 0;
+
+  }
+
+  // WATCH - Slicno kao BB data events
+  $scope.$watch($scope.totalCart, calculateDiscount);
+}
+
+// GORNJI PRISTUP PRAVI PERFORMANCE ISSUES
+// npr totalCart() se poziva 6 puta (3 puta je normalno, ostalo NG vrsi proveru)
+
+
+// Workaround performance
+// Ovde je sve premesteno u watch()
+// tacnije ovde se prati var a ne funkcija
+function CartController2($scope) {
+  $scope.bill = {};
+  $scope.items = [
+    {title: 'Paint pots', quantity: 8, price: 3.95},
+    {title: 'Polka dots', quantity: 17, price: 12.95},
+    {title: 'Pebbles', quantity: 5, price: 6.95}
+  ];
+
+  var calculateTotals = function() {
+    var total = 0;
+    for (var i = 0, len = $scope.items.length; i < len; i++) {
+      total = total + $scope.items[i].price * $scope.items[i].quantity;
+    }
+
+    $scope.bill.totalCart = total;
+    $scope.bill.discount = total > 100 ? 10 : 0;
+    $scope.bill.subtotal = total - $scope.bill.discount;
+
+  };
+
+  // true = tells Angular to examine each prop‐
+  // erty within the watched object for changes.
+  $scope.$watch('items', calculateTotals, true);
+}
+
+// PERFOMANCE 3
+// Kada se prati niz ili velik broj obj
+// onda postoji treca solucija
+
+// Ovo u sustini pokrece f() za svaku promenu $scope
+// Ovo ne pravi kopije nizova objekata za uporedjivanje
+$scope.$watch(function() {
+  var total = 0;
+
+  for (var i = 0; i < $scope.items.length; i++) {
+    total = total + $scope.items[i].price * $scope.items[i].quantity;
+  }
+
+  $scope.bill.totalCart = total;
+  $scope.bill.discount = total > 100 ? 20 : 0;
+  $scope.bill.subtotal = total - $scope.bill.discount;
+});
+
+// WATCH() ZA MULTIPLE THINGS
+// 1.Sve staviti u array/obj i passovati + deepWatch = true
+// 2.Concatenated value of properties
+
+$scope.$watch('things.a + other.b', callMe(..));
+
+$scope.$watch('things', callMe(..), true);
+
+
+
+</script>
+</body>
+</html>

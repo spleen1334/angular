@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+  <title>Basic App Setup</title>
+  <meta charset="utf-8" />
+  <script src="bower_components/angular/angular_old.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+
+<form ng-submit="requestFunding()" ng-controller="StartUpController">
+  Starting: <input ng-change="computeNeeded()" ng-model="startingEstimate">
+  Recommendation: {{needed || 0}}
+  <button>Fund my startup!</button>
+  <button ng-click="reset()">Reset</button>
+</form>
+
+
+<script>
+function StartUpController($scope) {
+  $scope.computeNeeded = function() {
+    $scope.needed = $scope.startingEstimate * 10;
+  };
+
+  $scope.requestFunding = function() {
+    window.alert("Sorry, please get more customers first.");
+  };
+
+  $scope.reset = function() {
+    $scope.startingEstimate = 0;
+  };
+
+  $scope.$watch('startingEstimate', $scope.computeNeeded);
+}
+  </script>
+</body>
+</html>

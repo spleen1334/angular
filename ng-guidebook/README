@@ -1,0 +1,115 @@
+NG PROPERTIES:
+$scope
+$id = unique id for current scope
+$window = isto sto i window u JS
+$location = browser url
+$routeParams = http query
+$locale = za lokalizaciju, npr razlicite slike za druge verzije
+
+NG REPEAT:
+$index =trenutna pozicija u ng-repeat
+$first, $last = prva poslednja
+$middle = true za sve osim za prvi i poslednju
+
+-EVEN -ODD:
+ng-repeat-even(odd) = isto samo sto ponavlja razlicite nizove
+
+SWITCH:
+ng-switch-when(-default) = switch direktiva za view
+
+PLURALIZE:
+ng-pluralize count >> when={} = koplikovaniji prikaz vise itema
+
+EVENTS:
+ng-click, ng-dblclick, ng-mouse-enter/leave ...
+
+ng-form = isto sto i html form ali postoji mogucnost nestovanja ?
+
+input> ng-required, ng-pattern
+
+ng-readonly ng-disabled ng-selected
+
+ng-cloak = sakriva elementa, loaduje ga tek kad se ucita cela strana
+
+FILTERS:
+| currency
+| uppercase, lowercase, number
+| json
+| linky = dodaje <a> svakoj sekciji teksta koji sadrzi url
+
+
+MODULES:
+One advantage of defining controllers, models, and other components as part of a module is
+that it groups them together under a common name. This way, if we have multiple applications
+on the same page, or content from another framework, it's easy to remember which
+components belong to which application
+
+Druga bitna prednost modula jeste i mogucnost DEPENDENCY INJECTION.
+PRIMER: Ucitavanje modela u kontrolere aplikacije, nema potreba za posebnim podesavanjima/loadovanjem
+jer su modeli i kontroleri definisani pod ISTIM modulom, tako da ng radi spajanje umesto nas
+
+MODEL TYPES: SERVICE, FACTORY, PROVIDER
+
+SERVICE >
+Najprostiji on se sastoji iz funkcija, uvek mora da ih returnuje.
+Pretezno returnuje samo jednu funkciju i izlazi iz kontrolera.
+Nema mogucnost detaljnijeg podesavanja.
+Problem je u tome sto je tesko postaviti inicializaciju, jer se sve poziva iz kontrolera a NE iz modela.
+
+FACTORY >
+Omogucava vracanje objekta umesto samo funkcije, to dalje omogucava konfigurisanje i inicijalizaciju.
+Npr moguce je definistati neku funkciju (tipe refresh()) koju cemo dalje ubaciti u u svaku funkciju.
+Tako da sva konfiguracija vezana za model ostaje u modelu i startuje se iz modela.
+
+PROVIDER >
+On se koristi kada je neophodna jos detaljnija konfiguracija i inicijalizacija (multipoint backend db endpoint npr).
+On omogucava da npr podesimo razne endpointe za razlicite instance modela.
+Bitno je da on omogucava da se konfiguracija vrsi u MODULE.CONFIG (iz main app) izvan modela.
+Sadrzi $get sto je slicno kao i __constructor u php. Poziva se za svaku instancu modela.
+Tako npr mozemo u razlicitim modulima imati razlicita podesavanja/konfiguraciju za isti model.
+Takodje omogucavaju povezivanje vise razlicitih modela na jedan endpoint (tj istu konfiguraciju za razlicite modele).
+
+
+DEPENDENCY INJECTION:
+Directives are used to add dynamic functionality to an HTML template
+
+1. Prvo se definise modul, u kome su definisane sve komponenete (model ctrl, view ..) koje ce biti injectovane.
+2. Na startu NG pravi injector u koji su ucitane sve komponenete iz modula
+3. Injector ucitava sve kompomente po potrebi (tako npr u nasem kontroleru uopste nismo morali explicitno
+   da ucitamo/povezemo model, vec sve to automatski radi NG)
+
+Postoji mogucnost manuelnog podesavanja sta ce biti injectovano uz pomoc $INJECT:
+deleteNoteController.$inject = ['$scope', '$location', '$routeParams', 'NoteModel'];
+
+DIRECTIVES:
+Direktive po defaultu nasledjuju $scope
+
+Naziv: <gb-note-list> = gbNoteList u JS
+
+Inheriting scope is a bad thing!
+1. mogucnost petljanja sa parent elementima 2. name clashing
+
+Ukoliko definisemo scope explicitno navodimo sta zelimo da pripada $scope.
+
+Simboli za $scope definiciju:
+(ovde se definise kakvu vrednost moze da PRIHVATI parametar)
+= - pass value as it is  > OBJ val
+@ - render as string > STRING
+& - render as expression > F()
+
+These =attr attributes in the scope option of directives are normalized just like directive names.
+To bind to the attribute in <div bind-to-this="thing">, you'd specify a binding of =bindToThis.
+
+For cases where the attribute name is the same as the value you want to bind to inside the directive's scope,
+you can use this SHORTHAND SYNTAX: nesto: '=' // isto sto i: nesto: '=nesto'
+
+
+RESTRICT = gde se renderuje
+E > element <gb-note-list>
+C > class <div class="gb-note-list">
+M > comment <!-- directive:gb-note-list -->
+
+IMA DETALJNIJE OBJASNJENJE u 60MIN NG
+(tu je objasnjen i link: startuj ovo kad se ucita document, )
+
+http://www.befundoo.com/university/tutorials/angularjs-directives-tutorial/

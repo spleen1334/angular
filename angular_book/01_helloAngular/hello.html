@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+  <title>Hello Angular!</title>
+  <meta charset="utf-8" />
+  <script src="../bower_components/angular/angular.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="controllers.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+  <div ng-controller="HelloController">
+    <input type="text" ng-model="greeting.text">
+    <p>{{greeting.text}}, Angular World!</p>
+  </div>
+</body>
+</html>

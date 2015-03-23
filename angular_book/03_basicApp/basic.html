@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+  <title>Basic App Setup</title>
+  <meta charset="utf-8" />
+  <script src="../bower_components/angular/angular_old.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body ng-controller="TextController">
+  <h1>Basic App</h1>
+  <p>{{someText.message}}</p>
+  </div>
+
+  <script>
+  // MODULE, ('naziv', [dependency])
+  var myAppModule = angular.module('myApp', []);
+
+  // CONTROLLER (dodat na module)
+  myAppModule.controller('TextController',
+      function($scope) {
+        var someText = {};
+        someText.message = "Data binding in action";
+
+        // dodaj u $scope
+        $scope.someText = someText;
+      });
+  </script>
+</body>
+</html>

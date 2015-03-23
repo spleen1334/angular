@@ -1,0 +1,8 @@
+<ul>
+  <li ng-repeat='note in chapter.notes | orderBy:"id"'>
+    <!-- $index = trenutno pozicija u ng-repeat -->
+    <div>#{{$index}}</div>
+    <div><a href ng-click='onDelete(note.id)'>delete</a></div>
+    <p>{{note.content}}</p>
+  </li>
+</ul>

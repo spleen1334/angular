@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Filters</title>
+  <meta charset="utf-8" />
+  <style type="text/css" media="screen">
+  </style>
+  <script src="bower_components/angular/angular_old.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body ng-app='HomeModule' ng-controller="HomeController">
+
+<h1>{{pageHeading | titleCase}}</h1>
+
+<script>
+var homeModule = angular.module('HomeModule', []);
+
+// CUSTOM FILTER
+homeModule.filter('titleCase', function() {
+  // Konvertuje svaku prvu rec u uppercase
+  // input >> je ono sto se prosledi filteru
+  // html >> pageHeading | titleCase
+  var titleCaseFilter = function(input) {
+    var words = input.split(' ');
+    for (var i = 0; i < words.length; i++) {
+      words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+    }
+    return words.join(' ');
+  };
+  return titleCaseFilter;
+});
+
+// Smesteni podaci u kontroleru
+homeModule.controller('HomeController', function($scope) {
+  $scope.pageHeading = 'behold the majesty of your page title';
+});
+
+</script>
+</body>
+</html>

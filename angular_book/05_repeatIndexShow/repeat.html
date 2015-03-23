@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+  <title>Repeat, Index, Show</title>
+  <meta charset="utf-8" />
+  <style type="text/css" media="screen">
+  .menu-disabled-true {
+    color: red;
+  }
+  </style>
+  <script src="bower_components/angular/angular_old.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+
+  <h1>NG-Repeat</h1>
+
+  <h5>Students:</h5>
+  <ul ng-controller="StudentCtrl">
+    <li ng-repeat="student in students">
+      <a href="/student/view/{{student.id}}">{{student.name}}</a>
+    </li>
+
+    <button ng-click="insertMica()">Insert Mica</button>
+  </ul>
+
+  <h5>Albums:</h5>
+  <table ng-controller='AlbumCtrl'>
+    <tr ng-repeat='track in album'>
+      <td>{{$index + 1}}</td>
+      <td>{{track.name}}</td>
+      <td>{{track.duration}}</td>
+    </tr>
+  </table>
+
+  <h5>Deathray:</h5>
+  <div ng-controller='DeathrayMenuController'>
+    <button ng-click='toggleMenu()'>Toggle Menu</button>
+    <ul ng-show='menuState'>
+      <li ng-click='stun()'>Stun {{stuned}}</li>
+      <li ng-click='disintegrate()'>Disintegrate {{laser}}</li>
+      <li>Click on erase for a kill!</li>
+      <li class="menu-disabled-{{isKilled}}" ng-click='erase()'>Erase from history {{end}}</li>
+    </ul>
+  <div/>
+
+<script>
+// NG-REPEAT
+var students = [
+  {name: "Beki"   , id: '1'} ,
+  {name: "Spleen" , id: '2'} ,
+  {name: "Osa"    , id: '3'}
+];
+
+function StudentCtrl($scope) {
+  $scope.students = students;
+
+  $scope.insertMica = function () {
+    $scope.students.splice(1, 0, {name: 'Mica', id:'4'});
+  }
+}
+
+// INDEX
+var album = [ { name:'Southwest Serenade', duration: '2:34'},
+              { name:'Northern Light Waltz', duration: '3:21'},
+              { name:'Eastern Tango', duration: '17:45'}];
+
+function AlbumCtrl($scope) {
+  $scope.album = album;
+}
+
+// NG-SHOW /HIDE
+function DeathrayMenuController($scope) {
+  // inicijalno stanje
+  $scope.menuState = false;
+
+  $scope.toggleMenu = function() {
+    $scope.menuState = !$scope.menuState;
+  };
+
+  $scope.stun = function() {
+    $scope.stuned = ">> ROGUE STUNLOCK!!";
+  };
+
+  $scope.disintegrate = function() {
+    $scope.laser = ">> PEW PEW!!";
+  };
+
+  $scope.erase = function() {
+    $scope.end = ">> TERMINATOR!!";
+
+    // CSS PRIMER (CSS KLASE ili style="{{neka vrednost}}")
+    // KORISTI SE SAMO ZA PROSTIJE APP
+    $scope.isKilled = 'true';
+  };
+}
+
+
+</script>
+</body>
+</html>
